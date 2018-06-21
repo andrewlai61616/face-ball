@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/Desktop/Final_Project/face_ball/ball_detection.hpp
+opencv2/opencv.hpp
+-
+
+/home/pi/Desktop/Final_Project/face_ball/track.cpp
+opencv2/opencv.hpp
+-
+wiringSerial.h
+-
+wiringPi.h
+-
+ball_detection.hpp
+/home/pi/Desktop/Final_Project/face_ball/ball_detection.hpp
+iostream
+-
+
+/usr/local/include/wiringPi.h
+
+/usr/local/include/wiringSerial.h
+
