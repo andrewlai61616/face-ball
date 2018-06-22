@@ -16,9 +16,12 @@ using namespace cv;
 #define BLUE_SHIFT_MIN_SAT 50
 #define YELLOW_SHIFT_MAX_VAL 3
 #define YELLOW_SHIFT_AMP 2
+#define GREEN_SHIFT_MIN_VAL (-20)
 #define YELLOW_SHIFT_MIN_SAT 0
 #define YELLOW_SHIFT_MIN_VAL 20
-#define GREEN_SHIFT_AMP 5
+#define PURPLE_SHIFT_MIN_VAL 30
+#define PURPLE_SHIFT_MIN_SAT 50
+#define GREEN_SHIFT_AMP 2
 #define BLUE_SHIFT_AMP 12
 #define MIN_SAT 70
 #define MAX_SAT 253
@@ -41,8 +44,10 @@ void inRangeColor(Mat* in, Mat* out ,char* argv){
 	}
 	if(strcmp(argv, "red")){ // not red
 		inRange(*in, Scalar(color_h[i]-AMPLITUDE - (i==3?GREEN_SHIFT_AMP:0) - (i==4?BLUE_SHIFT_AMP:0) - (i==2?YELLOW_SHIFT_AMP:0),
-			MIN_SAT - (i==3?GREEN_SHIFT_MIN_SAT:0) - (i==4?BLUE_SHIFT_MIN_SAT:0) - (i==2?YELLOW_SHIFT_MIN_SAT:0),
-			MIN_VAL - (i==4?BLUE_SHIFT_MIN_VAL:0) - (i==2?YELLOW_SHIFT_MIN_VAL:0)),
+			MIN_SAT - (i==3?GREEN_SHIFT_MIN_SAT:0) - (i==4?BLUE_SHIFT_MIN_SAT:0) - (i==2?YELLOW_SHIFT_MIN_SAT:0)
+			- (i==1?PURPLE_SHIFT_MIN_SAT:0),
+			MIN_VAL - (i==4?BLUE_SHIFT_MIN_VAL:0) - (i==2?YELLOW_SHIFT_MIN_VAL:0)
+			- (i==1?PURPLE_SHIFT_MIN_VAL:0) - (i==3?GREEN_SHIFT_MIN_VAL:0)),
 			Scalar(color_h[i]+AMPLITUDE + (i==3?GREEN_SHIFT_AMP:0) + (i==4?BLUE_SHIFT_AMP:0) + (i==2?YELLOW_SHIFT_AMP:0),
 			MAX_SAT, MAX_VAL + (i==2?YELLOW_SHIFT_MAX_VAL:0)), *out);
 	}else{ // red
@@ -68,11 +73,11 @@ CENTER_PERI get_center_and_peri(Mat frame, char* argv, int width, int height){
     double peri, circle_peri;
     CENTER_PERI ret(0,0,0);
 
-    GaussianBlur(frame, hsv_frame, Size(7,7), 0, 0);
+    GaussianBlur(frame, hsv_frame, Size(3,3), 0, 0);
     cvtColor( hsv_frame, hsv_frame, CV_BGR2HSV );
 
 		inRangeColor(&hsv_frame, &cut_frame, argv);
-//		imshow("CUT", cut_frame);
+		imshow("CUT", cut_frame);
 
     Canny(cut_frame, canny_frame, 50, 150, 5);
     findContours(canny_frame, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_NONE);
